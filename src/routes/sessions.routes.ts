@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import AuthenticateUserService from '../services/AuthenticateUserService';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const sessionsRouter = Router();
 
@@ -16,8 +17,12 @@ sessionsRouter.post('/', async (request, response) => {
     return response.json({ user, token });
 });
 
-sessionsRouter.get('/authTest', async (request, response) => {
-    return response.json({ message: 'You are authenticated' });
-});
+sessionsRouter.get(
+    '/authTest',
+    ensureAuthenticated,
+    async (request, response) => {
+        return response.json({ message: 'You are authenticated' });
+    },
+);
 
 export default sessionsRouter;
